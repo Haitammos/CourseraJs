@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galerie de Photos Interactive</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 2.5rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        .description {
+            color: #7f8c8d;
+            max-width: 800px;
+            margin: 0 auto;
+            font-size: 1.1rem;
+        }
+        
+        .gallery-container {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        
+        .main-image-container {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            min-height: 450px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        
+        .main-image {
+            width: 100%;
+            max-width: 700px;
+            height: 380px;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            transition: all 0.5s ease;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+        
+        .main-text {
+            font-size: 1.3rem;
+            color: #2c3e50;
+            min-height: 40px;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            border-radius: 30px;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+        
+        .thumbnail-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+        }
+        
+        .thumbnail {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .thumbnail:hover, .thumbnail:focus {
+            transform: scale(1.08);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            border-color: #3498db;
+            outline: none;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        
+        @media (max-width: 768px) {
+            .thumbnail-container {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            }
+            
+            .main-image {
+                height: 280px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+        
+        .image-counter {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Galerie de Photos Interactive</h1>
+            <p class="description">Une galerie accessible avec navigation au clavier et à la souris. Survolez ou utilisez la touche Tab pour naviguer entre les images.</p>
+        </header>
+        
+        <main class="gallery-container">
+            <section class="main-display">
+                <div class="main-image-container">
+                    <div class="main-image" id="featured-image"></div>
+                    <p class="main-text" id="featured-text">Survolez ou sélectionnez une image pour voir les détails</p>
+                    <div class="image-counter" id="image-counter">0 / 6</div>
+                </div>
+            </section>
+            
+            <section class="thumbnails">
+                <div class="thumbnail-container">
+                    <figure>
+                        <img src="https://images.unsplash.com/photo-1501854140801-50d01698950b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" 
+                             alt="Paysage montagneux avec un lac au coucher du soleil" 
+                             class="thumbnail" 
+                             data-large="https://images.unsplash.com/photo-1501854140801-50d01698950b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80">
+                    </figure>
+                    <figure>
+                        <img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" 
+                             alt="Forêt brumeuse avec des arbres et de la végétation dense" 
+                             class="thumbnail" 
+                             data-large="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80">
+                    </figure>
+                    <figure>
+                        <img src="https://images.unsplash.com/photo-1439066615861-d1af74d74000?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" 
+                             alt="Plage tropicale avec des palmiers et une mer turquoise" 
+                             class="thumbnail" 
+                             data-large="https://images.unsplash.com/photo-1439066615861-d1af74d74000?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80">
+                    </figure>
+                    <figure>
+                        <img src="https://images.unsplash.com/photo-1518837695005-2083093ee35b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" 
+                             alt="Vue aérienne d'une ville la nuit avec des lumières brillantes" 
+                             class="thumbnail" 
+                             data-large="https://images.unsplash.com/photo-1518837695005-2083093ee35b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80">
+                    </figure>
+                    <figure>
+                        <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" 
+                             alt="Paysage désertique avec des dunes de sable et un ciel bleu" 
+                             class="thumbnail" 
+                             data-large="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80">
+                    </figure>
+                    <figure>
+                        <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" 
+                             alt="Forêt de conifères enneigée par une journée d'hiver" 
+                             class="thumbnail" 
+                             data-large="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80">
+                    </figure>
+                </div>
+            </section>
+        </main>
+        
+        <footer>
+            <p>Projet final - Galerie de Photos Interactive et Accessible</p>
+            <p>Conforme aux standards d'accessibilité WCAG</p>
+        </footer>
+    </div>
+
+    <script>
+        function initGallery() {
+            console.log("Page chargée - initialisation de la galerie");
+            
+            const thumbnails = document.querySelectorAll('.thumbnail');
+            
+            for (let i = 0; i < thumbnails.length; i++) {
+                thumbnails[i].setAttribute('tabindex', '0');
+                console.log(`Tabindex ajouté à l'image ${i+1}`);
+            }
+            
+            const featuredImage = document.getElementById('featured-image');
+            const featuredText = document.getElementById('featured-text');
+            const imageCounter = document.getElementById('image-counter');
+            
+            const defaultText = "Survolez ou sélectionnez une image pour voir les détails";
+            
+            function updateFeatured(imageSrc, altText, index) {
+                featuredImage.style.backgroundImage = `url('${imageSrc}')`;
+                featuredText.textContent = altText;
+                imageCounter.textContent = `${index} / ${thumbnails.length}`;
+            }
+            
+            function resetFeatured() {
+                featuredImage.style.backgroundImage = '';
+                featuredText.textContent = defaultText;
+                imageCounter.textContent = `0 / ${thumbnails.length}`;
+            }
+            
+            for (let i = 0; i < thumbnails.length; i++) {
+                const thumbnail = thumbnails[i];
+                
+                thumbnail.addEventListener('mouseover', function() {
+                    const largeImage = this.getAttribute('data-large');
+                    const altText = this.getAttribute('alt');
+                    updateFeatured(largeImage, altText, i+1);
+                });
+                
+                thumbnail.addEventListener('mouseleave', function() {
+                    resetFeatured();
+                });
+                
+                thumbnail.addEventListener('focus', function() {
+                    const largeImage = this.getAttribute('data-large');
+                    const altText = this.getAttribute('alt');
+                    const index = Array.from(thumbnails).indexOf(this) + 1;
+                    updateFeatured(largeImage, altText, index);
+                });
+                
+                thumbnail.addEventListener('blur', function() {
+                    resetFeatured();
+                });
+                
+                thumbnail.addEventListener('keydown', function(event) {
+                    if (event.key === 'Enter') {
+                        const largeImage = this.getAttribute('data-large');
+                        const altText = this.getAttribute('alt');
+                        const index = Array.from(thumbnails).indexOf(this) + 1;
+                        updateFeatured(largeImage, altText, index);
+                    }
+                });
+            }
+            
+            console.log("Galerie initialisée avec succès");
+        }
+        
+        window.onload = initGallery;
+    </script>
+</body>
+</html>
