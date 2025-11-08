@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Galerie de Photos Interactive</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -41,6 +41,7 @@
         }
         figure.thumb {
             background:transparent; border-radius:8px; padding:6px; text-align:center; border:2px solid transparent;
+            transition: transform .18s ease;
         }
         img.thumbnail {
             width:100%; height:140px; object-fit:cover; border-radius:8px; display:block; cursor:pointer;
@@ -63,6 +64,18 @@
             .main-image { height:260px; }
             img.thumbnail { height:120px; }
         }
+        
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
     </style>
 </head>
 <body>
@@ -72,9 +85,9 @@
             <p class="description">Une galerie accessible — navigation souris & clavier.</p>
         </header>
 
-        <main class="gallery-container" role="main">
+        <main class="gallery-container">
             <section class="main-display" aria-labelledby="main-display-title">
-                <h2 id="main-display-title" style="position:absolute; left:-10000px; top:auto; width:1px; height:1px; overflow:hidden;">Image mise en avant</h2>
+                <h2 id="main-display-title" class="sr-only">Image mise en avant</h2>
                 <div class="main-image-container" aria-live="polite" aria-atomic="true">
                     <div id="featured-image" class="main-image" role="img" aria-label="Image mise en avant - aucune image sélectionnée"></div>
                     <p id="featured-text" class="main-text">Survolez ou sélectionnez une image pour voir les détails</p>
@@ -82,12 +95,10 @@
                 </div>
             </section>
 
-            <!-- Section miniatures (doit contenir un titre pour l'accessibilité) -->
             <section class="thumbnails" aria-labelledby="thumbnails-title">
-                <h2 id="thumbnails-title" style="position:absolute; left:-10000px; top:auto; width:1px; height:1px; overflow:hidden;">Miniatures</h2>
+                <h2 id="thumbnails-title" class="sr-only">Miniatures</h2>
 
                 <div class="thumbnail-container" id="thumbnail-container">
-                    <!-- Chaque figure contient l'image + figcaption (alt aussi présent) -->
                     <figure class="thumb">
                         <img src="images/1.avif" alt="Paysage montagneux avec un lac au coucher du soleil" class="thumbnail" data-large="images/11.avif">
                         <figcaption>Montagnes - coucher de soleil</figcaption>
@@ -154,6 +165,7 @@
             });
 
             fig.addEventListener('mouseleave', function() {
+                resetFeatured();
             });
 
             fig.addEventListener('focus', function() {
@@ -162,6 +174,7 @@
             });
 
             fig.addEventListener('blur', function() {
+                resetFeatured();
             });
 
             fig.addEventListener('keydown', function(e) {
@@ -177,11 +190,6 @@
                 updateFeatured(large, captionText, i + 1);
             });
         }
-
-        const firstImg = thumbs[0].querySelector('img.thumbnail');
-        const firstCaption = thumbs[0].querySelector('figcaption') ? thumbs[0].querySelector('figcaption').textContent.trim() : firstImg.alt;
-        const firstLarge = firstImg.getAttribute('data-large') || firstImg.src;
-        updateFeatured(firstLarge, firstCaption, 1);
 
         function updateFeatured(url, caption, idx) {
             featured.style.backgroundImage = url ? `url('${url}')` : '';
